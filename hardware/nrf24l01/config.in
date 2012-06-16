@@ -1,0 +1,19 @@
+dep_bool_menu "NRF24L01 support" NRF24L01_SUPPORT $CONFIG_EXPERIMENTAL $ARCH_AVR
+//  dnl    dep_bool "NRF24L01 general" NRF24L01_GENERAL_SUPPORT $NRF24L01_SUPPORT $CONFIG_EXPERIMENTAL
+    menu "Protocol support" //NRF24L01_PROTOCOL_SUPPORT $NRF24L01_SUPPORT $CONFIG_EXPERIMENTAL
+        dep_bool_menu "R0ket" NRF24L01_PROTOCOL_R0KET_SUPPORT $NRF24L01_SUPPORT $CONFIG_EXPERIMENTAL
+            dep_bool_menu "Send Nick" NRF24L01_PROTOCOL_R0KET_SEND_NICK_SUPPORT $NRF24L01_PROTOCOL_R0KET_SUPPORT $CONFIG_EXPERIMENTAL
+                string "Nick" NRF24L01_PROTOCOL_R0KET_NICK "bernd"
+                int "ID" NRF24L01_PROTOCOL_R0KET_ID 0x41414141
+            endmenu
+            string "Event target ip" NRF24L01_PROTOCOL_R0KET_EVENT_TARGET_IP "10.0.1.27"
+            string "Event target port" NRF24L01_PROTOCOL_R0KET_EVENT_TARGET_PORT "4254"
+            string "Location name" NRF24L01_PROTOCOL_R0KET_LOCATION "/dev/null"
+        endmenu
+    endmenu
+    int "Max payload size" NRF24L01_MAX_PAYLOAD_SIZE 32
+	comment  "Debugging Flags"
+    dep_bool 'NRF24L01 general' DEBUG_NRF24L01 $DEBUG
+	dep_bool 'R0ket' DEBUG_NRF24L01_PROTOCOL_R0KET $DEBUG
+endmenu
+

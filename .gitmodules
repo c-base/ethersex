@@ -1,0 +1,3 @@
+[submodule "hardware/nrf24l01/driver"]
+	path = hardware/nrf24l01/driver
+	url = git@github.com:jaseg/RF24.git

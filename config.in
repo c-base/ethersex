@@ -281,6 +281,7 @@ comment "I/O"
 	source hardware/ir/config.in
 	source hardware/isdn/config.in
 	source hardware/pwm/config.in
+    source hardware/nrf24l01/config.in
 	source hardware/onewire/config.in
 	source hardware/input/config.in
 	source hardware/input/ps2/config.in
