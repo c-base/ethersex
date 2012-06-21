@@ -21,15 +21,15 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
-#ifndef HAVE_C-BEAM_STATE_H
-#define HAVE_C-BEAM_STATE_H
+#ifndef HAVE_C_BEAM_STATE_H
+#define HAVE_C_BEAM_STATE_H
 
 #include <inttypes.h>
 #include "protocols/ecmd/via_tcp/ecmd_state.h"
 
-struct c-beam_connection_state_t {
+struct c_beam_connection_state_t {
     uint8_t len;
     char outbuf[128];
 };
 
-#endif  /* HAVE_C-BEAM_STATE_H */
+#endif  /* HAVE_C_BEAM_STATE_H */

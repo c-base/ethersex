@@ -1,7 +1,7 @@
-dep_bool_menu "c-beam JSONRPC client (EXPERIMENTAL)" C-BEAM_SUPPORT $TCP_SUPPORT $CONFIG_EXPERIMENTAL
-  ip "Server IP" CONF_C-BEAM_IP "10.0.1.27"
-  int "Server Port" CONF_C-BEAM_PORT 4254
+dep_bool_menu "c-beam JSONRPC client (EXPERIMENTAL)" C_BEAM_SUPPORT $TCP_SUPPORT $CONFIG_EXPERIMENTAL
+  ip "Server IP" CONF_C_BEAM_IP "10.0.1.27"
+  int "Server Port" CONF_C_BEAM_PORT 4254
 
 	comment  "Debugging Flags"
-	dep_bool 'c-beam' DEBUG_C-BEAM $DEBUG $C-BEAM_SUPPORT
+	dep_bool 'c-beam' DEBUG_C_BEAM $DEBUG $C_BEAM_SUPPORT
 endmenu

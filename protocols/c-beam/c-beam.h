@@ -21,11 +21,12 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
-#ifndef HAVE_C-BEAM_H
-#define HAVE_C-BEAM_H
+#ifndef HAVE_C_BEAM_H
+#define HAVE_C_BEAM_H
 
-void irc_init (void);
-void irc_periodic(void);
+void c_beam_call(const char method[], const char params[]);
+void c_beam_init(void);
+void c_beam_periodic(void);
 
 #include "config.h"
-#endif  /* HAVE_C-BEAM_H */
+#endif  /* HAVE_C_BEAM_H */

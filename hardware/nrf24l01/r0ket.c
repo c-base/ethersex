@@ -2,6 +2,7 @@
 #include "config.h"
 #include "driver/nrf24l01.h"
 #include "core/debug.h"
+#include "protocols/c-beam/c-beam.h"
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -47,9 +48,12 @@ inline uint8_t min(uint8_t a, uint8_t b){
     return (a<b ? a : b);
 }
 
-inline uint16_t flip16(uint16_t number)
-{
+inline uint16_t flip16(uint16_t number){
     return number>>8|number<<8;
+}
+
+inline uint32_t flip32(uint32_t number){
+    return flip16(number>>16)|(uint32_t)flip16(number&0xFFFF)<<16;
 }
 
 //FIXME check if this is not already available in the avr-libc
@@ -57,8 +61,7 @@ uint16_t crc16(uint8_t* buf, int len)
 {
     /* code from r0ket/firmware/basic/crc.c */
     uint16_t crc = 0xffff;
-    for (int i=0; i < len; i++)
-    {
+    for(int i=0; i < len; i++){
         crc = (unsigned char)(crc >> 8) | (crc << 8);
         crc ^= buf[i];
         crc ^= (unsigned char)(crc & 0xff) >> 4;
@@ -137,7 +140,7 @@ void r0ketbeam_periodic(void){
         nrf24_read(&buf, sizeof(buf));
 
 #ifdef NRF24L01_PROTOCOL_R0KET_DEBUG
-        debug_printf("RF24 RECV %h: %h (%d) %h", flip_32(buf.id), flip32(buf.sequence), buf.strength, buf.protocol);
+        debug_printf("RF24 RECV %h: %h (%d) %h", flip32(buf.id), flip32(buf.sequence), buf.strength, buf.protocol);
 #endif
 
         uint16_t crc = flip16(crc16((uint8_t*)&buf, sizeof(buf)-2));
@@ -146,7 +149,13 @@ void r0ketbeam_periodic(void){
             debug_printf("NRF24L01 r0ket CRC mismatch: expected %h got %h", crc, buf.crc);
 #endif
         }else{
-            //FIXME call c-beam here
+            //TODO I do not know if the following check is necessary
+            if(buf.protocol == 0x17){
+                char params[48]; //TODO does this need a config option? It could need more for nicks > 16 char or thereabouts
+                //FIXME is %h a hex printf in this particular printf implementation? and %d an unsigned decmial?
+                snprintf_P(params, sizeof(params), PSTR("\"%h\",\"" NRF24L01_PROTOCOL_R0KET_LOCATION "\",\"%h\",\"%d\""), flip32(buf.id), flip32(buf.sequence), buf.strength);
+                c_beam_call("r0ketseen", params);
+            }
         }
     }else{
 #ifdef NRF24L01_PROTOCOL_R0KET_DEBUG

@@ -32,11 +32,12 @@
 #include "protocols/uip/uip.h"
 #include "c-beam.h"
 
-#define STATE (&uip_conn->appstate.c-beam)
+#define STATE (&uip_conn->appstate.c_beam)
 
-static uip_conn_t *c-beam_conn;
+static uip_conn_t *c_beam_conn;
 
-static void c-beam_call (const char PROGMEM method[], const char PROGMEM params[]){
+//FIXME I am not quite sure where there should be PROGMEM attributes around here
+void c_beam_call (const char method[], const char params[]){
     STATE->len = sprintf_P (STATE->outbuf, PSTR(
         "POST / HTTP/1.0\n"
         "User-Agent: r0ketsex on nanode\n"
@@ -47,36 +48,36 @@ static void c-beam_call (const char PROGMEM method[], const char PROGMEM params[
         "\"params\":[%s]}\n\n   "), method, params);
 }
 
-static void c-beam_main(void){
+static void c_beam_main(void){
     if(uip_aborted() || uip_timedout() || uip_close()){
-        c-beam_conn = NULL;
+        c_beam_conn = NULL;
         return;
     }
     if((uip_connected() || uip_acked() || uip_newdata() || uip_poll()) && *STATE->outbuf){
-        uip_send(*STATE->outbuf, *STATE->len);
+        uip_send(STATE->outbuf, STATE->len);
     }
     //ignore received data.
     //screw retransmissions.
 }
 
-void irc_periodic(void){
-    if (! c-beam_conn){
-        c-beam_init();
+void c_beam_periodic(void){
+    if (! c_beam_conn){
+        c_beam_init();
     }
 }
 
-void irc_init(void){
+void c_beam_init(void){
     uip_ipaddr_t ip;
-    set_CONF_C-BEAM_IP(&ip);
-    irc_conn = uip_connect(&ip, HTONS(CONF_C-BEAM_PORT), c-beam_main);
+    set_CONF_C_BEAM_IP(&ip);
+    c_beam_conn = uip_connect(&ip, HTONS(CONF_C_BEAM_PORT), c_beam_main);
 }
 
 /*
   -- Ethersex META --
   header(protocols/c-beam/c-beam.h)
-  net_init(c-beam_init)
-  timer(2000, c-beam_periodic())
+  net_init(c_beam_init)
+  timer(500, c_beam_periodic())
 
   state_header(protocols/c-beam/c-beam_state.h)
-  state_tcp(struct c-beam_connection_state_t c-beam)
+  state_tcp(struct c_beam_connection_state_t c_beam)
 */
