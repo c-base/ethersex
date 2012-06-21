@@ -50,6 +50,7 @@ SUBDIRS += hardware/nrf24l01
 SUBDIRS += hardware/nrf24l01/driver
 SUBDIRS += protocols/artnet
 SUBDIRS += protocols/bootp
+SUBDIRS += protocols/c-beam
 SUBDIRS += protocols/dali
 SUBDIRS += protocols/dhcp 
 SUBDIRS += protocols/dmx
